@@ -896,8 +896,26 @@ esp:AddToggle(
 )
 
 local function esp(p, cr)
-    local h = cr:WaitForChild("Humanoid")
-    local hrp = cr:WaitForChild("HumanoidRootPart")
+    if not cr then
+        print("Character is not valid.")
+        return
+    end
+
+    -- Using a timeout to avoid infinite yield
+    local h = cr:WaitForChild("Humanoid", 5)  -- Wait for 5 seconds
+    if not h then
+        print("Humanoid not found for character.")
+        return
+    end
+
+    local hrp = cr:WaitForChild("HumanoidRootPart", 5)  -- Wait for 5 seconds
+    if not hrp then
+        print("HumanoidRootPart not found for character.")
+        return
+    end
+
+    -- Continue with your ESP logic...
+end
 
     local text = Drawing.new("Text")
     text.Visible = false
