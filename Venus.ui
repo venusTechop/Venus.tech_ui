@@ -896,21 +896,9 @@ esp:AddToggle(
 )
 
 local function esp(p, cr)
-    if not cr then
-        return  -- Exit if the character is not valid
-    end
+    local h = cr:WaitForChild("Humanoid")
+    local hrp = cr:WaitForChild("HumanoidRootPart")
 
-    local h = cr:WaitForChild("Humanoid", 5)  -- Wait for 5 seconds
-    if not h then
-        return  -- Exit if Humanoid is not found
-    end
-
-    local hrp = cr:WaitForChild("HumanoidRootPart", 5)  -- Wait for 5 seconds
-    if not hrp then
-        return  -- Exit if HumanoidRootPart is not found
-    end
-
-    -- Create a new Drawing text object for this player
     local text = Drawing.new("Text")
     text.Visible = false
     text.Center = true
@@ -919,26 +907,34 @@ local function esp(p, cr)
     text.Color = Color3.fromRGB(255, 255, 255)
     text.Size = 13
 
+    local c1, c2, c3
+
     local function dc()
         text.Visible = false
         text:Remove()
-        text = nil  -- Clear reference to the drawing object
+        if c1 then
+            c1:Disconnect()
+            c1 = nil
+        end
+        if c2 then
+            c2:Disconnect()
+            c2 = nil
+        end
+        if c3 then
+            c3:Disconnect()
+            c3 = nil
+        end
     end
-
-    local c1, c2, c3
 
     c2 = cr.AncestryChanged:Connect(function(_, parent)
         if not parent then
             dc()
-            if c1 then c1:Disconnect() end
-            if c3 then c3:Disconnect() end
         end
     end)
 
     c3 = h.HealthChanged:Connect(function(v)
         if (v <= 0) or (h:GetState() == Enum.HumanoidStateType.Dead) then
             dc()
-            if c1 then c1:Disconnect() end
         end
     end)
 
@@ -967,7 +963,7 @@ local function p_added(p)
     end)
 end
 
-for _, p in pairs(ps:GetPlayers()) do
+for i, p in next, ps:GetPlayers() do
     if p ~= lp then
         p_added(p)
     end
