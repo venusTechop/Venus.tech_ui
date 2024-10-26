@@ -571,16 +571,11 @@ local function createJamkleBox(v)
             if v.Character and v.Character:FindFirstChild("Humanoid") and v.Character:FindFirstChild("HumanoidRootPart") and v.Character.Humanoid.Health > 0 then
                 local Vector, onScreen = camera:worldToViewportPoint(v.Character.HumanoidRootPart.Position)
 
-                local RootPart = v.Character:FindFirstChild("HumanoidRootPart")
-local Head = v.Character:FindFirstChild("Head")
-
-if RootPart and Head then
-    local RootPosition, RootVis = worldToViewportPoint(CurrentCamera, RootPart.Position)
-    local HeadPosition = worldToViewportPoint(CurrentCamera, Head.Position + HeadOff)
-    local LegPosition = worldToViewportPoint(CurrentCamera, RootPart.Position - LegOff)
-else
-    -- Handle case where Head or HumanoidRootPart does not exist
-end
+                local RootPart = v.Character.HumanoidRootPart
+                local Head = v.Character.Head
+                local RootPosition, RootVis = worldToViewportPoint(CurrentCamera, RootPart.Position)
+                local HeadPosition = worldToViewportPoint(CurrentCamera, Head.Position + HeadOff)
+                local LegPosition = worldToViewportPoint(CurrentCamera, RootPart.Position - LegOff)
 
                 if onScreen and healthBarEnabled then
                     -- Remove the BoxOutline drawing
